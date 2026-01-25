@@ -6,6 +6,8 @@ import com.mcmlr.blocks.api.Resources
 import com.mcmlr.blocks.api.data.ConfigModel
 import com.mcmlr.blocks.api.data.Repository
 import com.mcmlr.blocks.core.DudeDispatcher
+import com.mcmlr.blocks.core.isFolia
+import com.mcmlr.folia.teleportAsync
 import com.mcmlr.system.dagger.AppScope
 import com.mcmlr.system.dagger.EnvironmentScope
 import com.mcmlr.system.products.data.CooldownRepository
@@ -43,6 +45,7 @@ class HomeListRepository @Inject constructor(
 
 @AppScope
 class HomesRepository @Inject constructor(
+    private val player: Player,
     private val resources: Resources,
     private val cooldownRepository: CooldownRepository,
     private val homesConfigRepository: HomesConfigRepository,
@@ -51,7 +54,16 @@ class HomesRepository @Inject constructor(
     private var updatingHome: HomeModel? = null
 
     fun teleport(player: Player, location: Location) {
-        player.teleport(location)
+        if (isFolia()) {
+            teleportAsync(player, location)
+        } else {
+            if (isFolia()) {
+                teleportAsync(player, location)
+            } else {
+                player.teleport(location)
+            }
+        }
+
         cooldownRepository.addPlayerLastHomeTime(player)
     }
 
@@ -83,7 +95,7 @@ class HomesRepository @Inject constructor(
     }
 
     private fun cachePlayerHomes(playerId: UUID, playerHomesModel: PlayerHomesModel) {
-        CoroutineScope(DudeDispatcher()).launch {
+        CoroutineScope(DudeDispatcher(player)).launch {
             playerHomesMap[playerId] = playerHomesModel
         }
     }

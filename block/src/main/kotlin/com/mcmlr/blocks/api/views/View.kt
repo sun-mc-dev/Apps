@@ -9,6 +9,7 @@ import com.mcmlr.blocks.api.views.Axis.Y
 import com.mcmlr.blocks.core.FlowDisposer
 import org.bukkit.Location
 import org.bukkit.entity.BlockDisplay
+import org.bukkit.entity.Player
 
 abstract class View(
     protected var modifier: Modifier,
@@ -174,6 +175,8 @@ abstract class View(
         dependants.add(viewable)
     }
 
+    override fun player(): Player = parent.player()
+
     override fun addContainerDisplay(view: ViewContainer): TextDudeDisplay? = parent.addContainerDisplay(view)
 
     override fun updateContainerDisplay(view: ViewContainer) = parent.updateContainerDisplay(view)
@@ -181,10 +184,6 @@ abstract class View(
     override fun addTextDisplay(view: TextView): TextDudeDisplay? = parent.addTextDisplay(view)
 
     override fun updateTextDisplay(view: TextView) = parent.updateTextDisplay(view)
-
-    override fun addEntityDisplay(view: EntityView): EntityDudeDisplay? = parent.addEntityDisplay(view)
-
-    override fun updateEntityDisplay(view: EntityView): EntityDudeDisplay? = parent.updateEntityDisplay(view)
 
     override fun addItemDisplay(view: ItemView): ItemDudeDisplay? = parent.addItemDisplay(view)
 

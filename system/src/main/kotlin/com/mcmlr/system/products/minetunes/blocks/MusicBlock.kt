@@ -18,6 +18,7 @@ import com.mcmlr.system.products.minetunes.player.Track
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bukkit.ChatColor
+import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -132,6 +133,7 @@ class MusicViewController(
                             addViewContainer(
                                 modifier = Modifier()
                                     .size(MATCH_PARENT, 75),
+
                                 clickable = true,
                                 listener = object : Listener {
                                     override fun invoke() {
@@ -534,8 +536,8 @@ class MusicInteractor(
                 LibraryListModelType.ARTIST -> {
                     val artist = it.artist ?: return@setContentClickedCallback
                     SearchFactory.search(artist.lowercase(), SearchState.ARTIST)
-                        .collectFirst(DudeDispatcher()) {
-                            CoroutineScope(DudeDispatcher()).launch {
+                        .collectFirst(DudeDispatcher(player)) {
+                            CoroutineScope(DudeDispatcher(player)).launch {
                                 val artistSongs = it.filter { it.artist == artist }
                                 artistBlock.setArtist(artist, artistSongs)
                                 routeTo(artistBlock)
@@ -547,8 +549,8 @@ class MusicInteractor(
                     val album = it.album ?: return@setContentClickedCallback
                     val artist = it.artist ?: return@setContentClickedCallback
                     SearchFactory.search(artist.lowercase(), SearchState.ARTIST)
-                        .collectFirst(DudeDispatcher()) {
-                            CoroutineScope(DudeDispatcher()).launch {
+                        .collectFirst(DudeDispatcher(player)) {
+                            CoroutineScope(DudeDispatcher(player)).launch {
                                 val albumSongs = it.filter { it.artist == artist && it.album == album }
 
                                 playlistBlock.setPlaylist(Playlist(name = album, songs = albumSongs.toMutableList()))

@@ -3,6 +3,7 @@ package com.mcmlr.blocks.api.views
 import com.mcmlr.blocks.api.ScrollEvent
 import com.mcmlr.blocks.api.block.Listener
 import org.bukkit.Location
+import org.bukkit.entity.Player
 
 interface Viewable {
     var offset: Int
@@ -37,6 +38,8 @@ interface Viewable {
 
     fun updateDisplay()
 
+    fun player(): Player
+
     fun addContainerDisplay(
         view: ViewContainer
     ): TextDudeDisplay?
@@ -52,14 +55,6 @@ interface Viewable {
     fun updateTextDisplay(
         view: TextView
     )
-
-    fun addEntityDisplay(
-        view: EntityView
-    ): EntityDudeDisplay?
-
-    fun updateEntityDisplay(
-        view: EntityView
-    ): EntityDudeDisplay?
 
     fun addItemDisplay(
         view: ItemView
